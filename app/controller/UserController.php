@@ -22,6 +22,7 @@ class UserController
     public function delete($id)
     {
         $this->userModel->delete($id);
+        header("Location:index.php?page=user-list");
         include_once "app/view/user/delete.php";
     }
 

@@ -1,8 +1,10 @@
 <?php
+
 namespace App\controller;
 //include_once "../model/UserModel.php";
 
 use App\model\UserModel;
+use PDOException;
 
 class AuthController
 {
@@ -26,6 +28,7 @@ class AuthController
         if ($this->userModel->checkLogin($email, $password)) {
             $user = $this->userModel->getByEmail($email);
             $_SESSION["username"] = $user["name"];
+            $_SESSION["img"] = $user["img"];
             header("Location:index.php");
         } else {
             var_dump("tai khoan khong dung");
@@ -54,15 +57,21 @@ class AuthController
         include_once "app/view/auth/register.php";
     }
 
-    public function register()
+    public function register($data)
     {
 
         if (isset($_POST['submit'])) {
-            $name = $_POST['name'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-//            $rPassword = $_POST['password-repeat'];
-            $this->userModel->register($name, $email, $password);
+            $data = [
+                "name" => $_POST['name'],
+                "email" => $_POST['email'],
+                "password" => $_POST['password']
+            ];
+            try {
+                $this->userModel->register($data);
+            }catch (PDOException $e){
+                echo $e->getMessage();
+            }
+
         }
     }
 

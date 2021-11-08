@@ -1,12 +1,6 @@
 <?php
 require_once __DIR__ . "/vendor/autoload.php";
-//include_once "model/UserModel.php";
-//include_once "model/NoteModel.php";
-//include_once "model/NoteTypeModel.php";
-//include_once "controller/NoteController.php";
-//include_once "controller/NoteTypeController.php";
-//include_once "controller/UserController.php";
-//include_once "controller/AuthController.php";
+
 use App\controller\NoteController;
 use App\controller\NoteTypeController;
 use App\controller\UserController;
@@ -16,9 +10,6 @@ use App\model\NoteModel;
 use App\model\NoteTypeModel;
 use App\model\UserModel;
 use App\model\NoteTableModel;
-
-//use model\NoteModel;
-//use model\NoteTypeModel;
 
 
 session_start();
@@ -34,7 +25,7 @@ $noteTableController = new NoteTableController();
 $authController = new AuthController();
 $page = (isset($_GET["page"])) ? $_GET["page"] : "";
 $username = ($_SESSION["username"] ?? "");
-
+$img = ($_SESSION["image"]??"");
 
 ?>
 <!doctype html>
@@ -51,50 +42,60 @@ $username = ($_SESSION["username"] ?? "");
 
 <body>
 
-<?php if ($_SESSION['username']) :?>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.php">I NOTES</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Function
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="index.php?page=note-list">Note</a></li>
-                        <li><a class="dropdown-item" href="index.php?page=noteType-list">Note type</a></li>
-                        <li><a class="dropdown-item" href="index.php?page=user-list">User list</a></li>
-                        <li><a class="dropdown-item" href="index.php?page=noteTables">Notes Detail</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="index.php?page=logout">LOG OUT</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Hello: <?php echo $username; ?></a>
-                </li>
-            </ul>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
+<?php if ($_SESSION['username']) : ?>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">I NOTES</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Function
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="index.php?page=note-list">Note</a></li>
+                            <li><a class="dropdown-item" href="index.php?page=noteType-list">Note type</a></li>
+                            <li><a class="dropdown-item" href="index.php?page=user-list">User list</a></li>
+                            <li><a class="dropdown-item" href="index.php?page=noteTables">Notes Detail</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="index.php?page=logout">LOG OUT</a></li>
+                        </ul>
+                    </li>
+                </ul>
 
-</nav>
+                <form class="d-flex">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">Hello:
+                            <?php echo $username; ?>
+
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="">Change password</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="index.php?page=logout">LOG OUT</a></li>
+                        </ul>
+                </form>
+            </div>
+        </div>
+
+    </nav>
 <?php endif; ?>
 <?php
 switch ($page) {
@@ -162,7 +163,7 @@ switch ($page) {
     case "user-delete":
         $id = $_GET["id"];
         $userController->delete($id);
-        header("Location:index.php?page=user-list");
+//        header("Location:index.php?page=user-list");
         break;
     case "user-edit":
         $id = $_GET["id"];
@@ -191,7 +192,7 @@ switch ($page) {
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $authController->showFormRegister();
         } else {
-            $authController->register();
+            $authController->register($_POST);
             header("Location:index.php?page=login");
         }
         break;

@@ -28,13 +28,13 @@ class UserModel extends BaseModel
 
     }
 
-    public function register($name, $email, $password)
+    public function register($data)
     {
         $sql = "INSERT INTO $this->table(name,email,password) VALUES (?,?,?)";
         $stmt = $this->dbConnect->prepare($sql);
-        $stmt->bindParam(1, $name);
-        $stmt->bindParam(2, $email);
-        $stmt->bindParam(3, $password);
+        $stmt->bindParam(1, $data["name"]);
+        $stmt->bindParam(2, $data["email"]);
+        $stmt->bindParam(3, $data["password"]);
         $stmt->execute();
 
     }

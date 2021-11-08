@@ -59,8 +59,8 @@
                             <td><?php echo $note["content"] ?></td>
                             <td><?php echo $note["type_id"] ?></td>
                             <td><?php echo $note["user_id"] ?></td>
-                            <td><a type="button" class="btn btn-dark""
-                                href="index.php?page=note-detail&id=<?php echo $note["id"] ?>">Detail</a></td>
+                            <td><a type="button" class="btn btn-dark"
+                                   href="index.php?page=note-detail&id=<?php echo $note["id"] ?>">Detail</a></td>
                             <td><a type="button" class="btn btn-danger" onclick="return confirm('Are you sure ?')"
                                    href="index.php?page=note-delete&id=<?php echo $note["id"] ?>">Delete</a></td>
                             <td><a type="button" class="btn btn-success"
